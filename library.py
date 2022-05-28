@@ -157,7 +157,5 @@ press Q if you want to cancel the process.\n""")
                                 order.status = "Cancelled"
                                 if librarian.return_book(book) is True:
                                     total_borrowed_books -= 1
-                                else:
-                                    pass
     else:
         print("You should enter a number from the above!\n")
