@@ -21,6 +21,7 @@ clients.append(Client(501, "Ahmed Mohammed", 20, 44321, "+970590000000"))
 librarians.append(Librarian(1, "Mohanad Alkurnz", 25, 56780, "+9709999999", "Full"))
 librarians.append(Librarian(2, "Fahed Naser", 25, 56780, "+9709999999", "Part"))
 
+
 def take_librarian_id():
     # take the librarian id
     for librarian in librarians:
@@ -30,13 +31,14 @@ def take_librarian_id():
     except ValueError:
         print("This is not an int!")
         librarian_id = 1
-    return  librarian_id
+    return librarian_id
+
 
 def take_client_id():
     # take the client id
     client_id = int(input("Whats your ID? "))
     is_exist = False
-    while (True):
+    while True:
         for client in clients:
             if client.id == client_id:
                 is_exist = True
@@ -48,9 +50,10 @@ def take_client_id():
             break
     return client_id
 
+
 # The program starts here
 print("Welcome to the library!")
-while(True):
+while True:
     try:
         procedure = int(input("""What procedure you want to make? 
 Pick a number from the following :
@@ -107,7 +110,7 @@ press Q if you want to cancel the process.\n""")
             books.append(Book(id, title, description, author))
             total_available_books += 1
         elif len(info.strip().split(",")) == 5:
-            id, title , description, author, status = info.strip().split(",")
+            id, title, description, author, status = info.strip().split(",")
             books.append(Book(id, title.lower(), description, author, status))
             total_available_books += 1
         else:
@@ -129,8 +132,9 @@ press Q if you want to cancel the process.\n""")
                 book_flag = True
                 for librarian in librarians:
                     if librarian.id == librarian_id:
-                        if librarian.borrow_book(book) == True:
-                            borrowed_orders.append(BorrowingOrder(total_borrowed_orders, datetime.datetime.now(), client_id, book.id, "Active"))
+                        if librarian.borrow_book(book) is True:
+                            borrowed_orders.append(BorrowingOrder(
+                                total_borrowed_orders, datetime.datetime.now(), client_id, book.id, "Active"))
                             total_borrowed_books += 1
                             total_borrowed_orders += 1
         if not book_flag:
@@ -144,14 +148,16 @@ press Q if you want to cancel the process.\n""")
         librarian_id = take_librarian_id()
         # Ask for the book title
         book_title = input("Which book do you want to return? ").lower()
-        for book in books :
+        for book in books:
             if book.title == book_title:
                 for librarian in librarians:
                     if librarian.id == librarian_id:
-                        borrowed_orders.append(BorrowingOrder(total_borrowed_orders, datetime.datetime.now(), client_id, book.id, "Expired"))
-                        if librarian.return_book(book) == True:
-                            total_borrowed_books -= 1
-                        else:
-                            pass
+                        for order in borrowed_orders:
+                            if order.book_id == book.id:
+                                order.status = "Cancelled"
+                                if librarian.return_book(book) is True:
+                                    total_borrowed_books -= 1
+                                else:
+                                    pass
     else:
         print("You should enter a number from the above!\n")

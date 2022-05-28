@@ -18,7 +18,7 @@ class Librarian(User):
             print("The book is already reserved, you can't borrow it!\n")
             return False
 
-    def return_book(self,book):
+    def return_book(self, book):
         if book.get_status() == "Inactive":
             book.set_status("Active")
             print("Thanks for returning the book.\n")
